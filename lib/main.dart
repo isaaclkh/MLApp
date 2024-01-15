@@ -1,17 +1,20 @@
-import 'package:first/temp.dart';
+import 'package:alarm/alarm.dart';
+import 'package:first/chat/temp.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(MyApp());
+import 'alarm_test_dir/alarm_test.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Temp(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  await Alarm.init(showDebugLogs: true);
+
+  runApp(
+    const MaterialApp(
+      home: ExampleAlarmHomeScreen(),
+    )
+  );
 }
