@@ -1,16 +1,17 @@
-
+import 'package:first/temp.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-class Main extends StatefulWidget {
-  const Main({Key? key}) : super(key: key);
+void main() => runApp(MyApp());
 
-  @override
-  State<Main> createState() => _MainState();
-}
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-class _MainState extends State<Main> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const MaterialApp(
+      home: Temp(),
+      debugShowCheckedModeBanner: false,
+    );
   }
 }
