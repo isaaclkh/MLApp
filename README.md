@@ -3,4 +3,4 @@ Medi-things company project
 
     Testing Status
         - Chatting UI Testing (done)
-        - Alarm / Notification Testing (processing)
+        - Alarm / Notification Testing (done)
