@@ -39,6 +39,9 @@ dependencies:
   alarm: ^3.0.4
   permission_handler: ^11.1.0
   flutter_form_builder: ^9.1.1
+  lottie: ^3.0.0
+  percent_indicator: ^4.2.3
+  cupertino_battery_indicator: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +73,8 @@ flutter:
    - assets/one_piece.mp3
    - assets/star_wars.mp3
    - assets/marimba.mp3
+   - assets/walking.json
+   - assets/logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
