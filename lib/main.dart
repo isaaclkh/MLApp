@@ -1,6 +1,8 @@
 import 'package:alarm/alarm.dart';
+import 'package:first/before/aiScreen.dart';
 import 'package:first/chat/temp.dart';
 import 'package:first/home_ui.dart';
+import 'package:first/reference16.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +17,7 @@ Future<void> main() async {
 
   runApp(
     const MaterialApp(
-      home: HomeUI(),
+      home: AIScreen(),
     )
   );
 }
