@@ -1,5 +1,5 @@
 import 'package:alarm/alarm.dart';
-import 'package:first/before/aiScreen.dart';
+import 'package:first/aiScreen.dart';
 import 'package:first/chat/temp.dart';
 import 'package:first/home_ui.dart';
 import 'package:first/reference16.dart';
@@ -17,7 +17,7 @@ Future<void> main() async {
 
   runApp(
     const MaterialApp(
-      home: AIScreen(),
+      home: HomeUI(),
     )
   );
 }

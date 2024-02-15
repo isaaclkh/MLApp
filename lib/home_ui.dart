@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:rive/rive.dart';
 
 class HomeUI extends StatefulWidget {
   const HomeUI({super.key});
@@ -17,17 +18,42 @@ class _HomeUIState extends State<HomeUI> {
   late int level;
   late int maxLevel;
   late int levelIdx;
+  late StateMachineController _stmController;
+  SMIInput<double>? _numberExampleInput;
 
   List<String> cmtTitle = ["\nFREE", "\nPREPARE", "\n!!WARNING!!"];
   List<Color> cmtColors = [Colors.green, Colors.orange, Colors.red];
+  List<Color> cardColors = [const Color.fromRGBO(200,225,204, 1), const Color.fromRGBO(255,215,105, 1), const Color.fromRGBO(253,216,216,1)];
+  List<Color> infoColors = [const Color.fromRGBO(143,182,171, 1), const Color.fromRGBO(231,159,49, 1), const Color.fromRGBO(238,114,114,1)];
+  List<Color> batteryColors = [const Color.fromRGBO(200,225,204, 1), const Color.fromRGBO(255,215,105, 1), const Color.fromRGBO(253,216,216,1)];
 
   @override
   initState(){
     super.initState();
-    level = 4;
+    level = 3;
     maxLevel = 8;
-    levelIdx = 1;
+    levelIdx = 0;
+ }
+
+ @override
+  void dispose() {
+    // TODO: implement dispose
+   _stmController.dispose();
+    super.dispose();
   }
+
+ void _riveOneInit(Artboard art){
+    _stmController = StateMachineController.fromArtboard(art, 'State Machine 1') as StateMachineController;
+    _stmController.isActive = true;
+    art.addController(_stmController);
+    _numberExampleInput = _stmController.findInput<double>('Number 1') as SMINumber;
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp){
+      setState(() {
+        _numberExampleInput?.value = levelIdx.toDouble();
+      });
+    });
+ }
 
   List<TextStyle> cmtTitleStyle = [
     const TextStyle(
@@ -78,8 +104,6 @@ class _HomeUIState extends State<HomeUI> {
     }
   }
 
-
-
   final todayString = DateFormat.yMMMd().format(DateTime.now());
 
   @override
@@ -98,14 +122,16 @@ class _HomeUIState extends State<HomeUI> {
           ],
         ),
         leadingWidth: 100,
+        toolbarHeight: 100,
         title: Text(todayString, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
         actions: [
-          const Column(
-            children: [
-              Icon(Icons.link, size: 35,),
-              Text("Linked", style: TextStyle(fontWeight: FontWeight.bold),),
-            ],
-          ),
+           const Column(
+             mainAxisAlignment: MainAxisAlignment.center,
+             children: [
+               Icon(Icons.link, size: 35,),
+               Text("Linked", style: TextStyle(fontWeight: FontWeight.bold),),
+             ],
+           ),
           Container(width: 25,),
         ],
       ),
@@ -116,20 +142,58 @@ class _HomeUIState extends State<HomeUI> {
               slivers: [
                 SliverToBoxAdapter(  // 단일 위젯은 요걸로
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 20, left: 15, right: 15,),
+                    padding: const EdgeInsets.only(top: 10, left: 15, right: 15,),
                     child: Container(
-                      height: MediaQuery.of(context).size.height * 0.45,
+                      height: MediaQuery.of(context).size.height * 0.3,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white),
-                        color: const Color.fromRGBO(178, 212, 182, 1),
-                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.transparent),
+                        color: cardColors[levelIdx],
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
                       ),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Center(child: Lottie.asset('assets/walking.json', frameRate: FrameRate.max, width: 250, height: 230,)),
+                          const SizedBox(height: 30,),
+                          // Center(child: Lottie.asset('assets/walking.json', frameRate: FrameRate.max, width: 250, height: 230,)),
+                          SizedBox(
+                            // color: Colors.purpleAccent,
+                            height: 180,
+                            width: MediaQuery.of(context).size.height * 0.23,
+                            child: RiveAnimation.asset(
+                              "assets/rive/lil_guy.riv",
+                              fit: BoxFit.fill,
+                              onInit: _riveOneInit,
+                              alignment: Alignment.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(  // 단일 위젯은 요걸로
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 15, right: 15,),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.15,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.transparent),
+                        color: infoColors[levelIdx],
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(20),
+                          bottomRight: Radius.circular(20),
+                        ),
+                      ),
+                      child: Column(
+                        // crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 15,),
+                          // Center(child: Lottie.asset('assets/walking.json', frameRate: FrameRate.max, width: 250, height: 230,)),
                           Padding(
-                            padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 25,),
+                            padding: const EdgeInsets.only(left: 30.0, right: 30.0,),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -176,22 +240,29 @@ class _HomeUIState extends State<HomeUI> {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 22,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 30,),
-                          child: BatteryIndicator(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 18, right: 18),
+                    child: Container(
+                      height: 60,
+                      decoration: const BoxDecoration(
+                        color: Colors.lightBlueAccent,
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                      ),
+
+                      child: const Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Spacer(flex: 1,),
+                          BatteryIndicator(
                             trackHeight: 17,
                             value: 0.9,
                             iconOutline: Colors.white,
                           ),
-                        ),
-                        Container(width: 10,),
-                        const Text("99%", style: TextStyle(fontSize: 18,),),
-                      ],
+                          Spacer(flex: 7,),
+                          Text("99%", style: TextStyle(fontSize: 18,),),
+                          Spacer(flex: 1,),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -207,8 +278,8 @@ class _HomeUIState extends State<HomeUI> {
                 SliverAppBar(
                   scrolledUnderElevation: 0.0,
                   pinned: true,
-                  expandedHeight: MediaQuery.of(context).size.height * 0.12,
-                  collapsedHeight: MediaQuery.of(context).size.height * 0.09,
+                  expandedHeight: MediaQuery.of(context).size.height * 0.13,
+                  collapsedHeight: MediaQuery.of(context).size.height * 0.1,
                   backgroundColor: Colors.white,
                   flexibleSpace: FlexibleSpaceBar(
                     titlePadding: const EdgeInsets.only(left: 30.0, top: 5.0, right: 0.0, bottom: 15.0),

@@ -162,7 +162,22 @@ class _AIScreenState extends State<AIScreen> {
                   ),
                 ),
                 // const Spacer(flex: 8,),
+                const SizedBox(height: 20,),
+
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: 80,
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: const Color.fromRGBO(126, 189, 194, 1),
+                    ),
+                    onPressed: (){},
+                    child: const Text("기기최적화", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+                  ),
+                ),
+
                 const Divider(thickness: 2.0, height: 75,),
+
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
                   height: 80,
@@ -256,6 +271,11 @@ class _AIScreenState extends State<AIScreen> {
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
+                                ),
+                                const SizedBox(height: 10,),
+                                const Padding(
+                                  padding: EdgeInsets.only(right: 25,),
+                                  child: Divider(height: 1.0,),
                                 ),
                                 const SizedBox(height: 15,),
                               ],
