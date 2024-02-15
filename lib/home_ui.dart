@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:rive/rive.dart';
+import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
 class HomeUI extends StatefulWidget {
   const HomeUI({super.key});
@@ -20,6 +21,7 @@ class _HomeUIState extends State<HomeUI> {
   late int levelIdx;
   late StateMachineController _stmController;
   SMIInput<double>? _numberExampleInput;
+  ValueNotifier<double> batteryValue = ValueNotifier(0);
 
   List<String> cmtTitle = ["\nFREE", "\nPREPARE", "\n!!WARNING!!"];
   List<Color> cmtColors = [Colors.green, Colors.orange, Colors.red];
@@ -33,6 +35,7 @@ class _HomeUIState extends State<HomeUI> {
     level = 3;
     maxLevel = 8;
     levelIdx = 0;
+    batteryValue.value = 100;
  }
 
  @override
@@ -144,7 +147,7 @@ class _HomeUIState extends State<HomeUI> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 10, left: 15, right: 15,),
                     child: Container(
-                      height: MediaQuery.of(context).size.height * 0.3,
+                      height: MediaQuery.of(context).size.height * 0.44,
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.transparent),
                         color: cardColors[levelIdx],
@@ -156,7 +159,49 @@ class _HomeUIState extends State<HomeUI> {
                       child: Column(
                         // crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 30,),
+                          const SizedBox(height: 20,),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 40, right: 40),
+                            child: Container(
+                              height: 80,
+                              decoration: const BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.all(Radius.circular(70)),
+                              ),
+
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Spacer(flex: 1,),
+                                  // BatteryIndicator(
+                                  //   trackHeight: 17,
+                                  //   value: 0.9,
+                                  //   iconOutline: Colors.white,
+                                  // ),
+                                  const Icon(Icons.bolt_rounded, color: Colors.greenAccent, size: 30,),
+                                  const SizedBox(width: 10,),
+                                  const Text("MediLight", style: TextStyle(fontSize: 20, color: Colors.white),),
+                                  const Spacer(flex: 2,),
+                                  SizedBox(
+                                    width: 53,
+                                    height: 53,
+                                    child: SimpleCircularProgressBar(
+                                      valueNotifier: batteryValue,
+                                      progressStrokeWidth: 3,
+                                      backStrokeWidth: 3,
+                                      mergeMode: true,
+                                      animationDuration: 0,
+                                      onGetText: (double value){
+                                        return Text("${value.toInt()}", style: TextStyle(color: Colors.white, fontSize: 20,),);
+                                      },
+                                    ),
+                                  ),
+                                  Spacer(flex: 1,),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 40,),
                           // Center(child: Lottie.asset('assets/walking.json', frameRate: FrameRate.max, width: 250, height: 230,)),
                           SizedBox(
                             // color: Colors.purpleAccent,
@@ -237,33 +282,6 @@ class _HomeUIState extends State<HomeUI> {
                 const SliverToBoxAdapter(
                   child: SizedBox(
                     height: 15,
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 18, right: 18),
-                    child: Container(
-                      height: 60,
-                      decoration: const BoxDecoration(
-                        color: Colors.lightBlueAccent,
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
-                      ),
-
-                      child: const Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Spacer(flex: 1,),
-                          BatteryIndicator(
-                            trackHeight: 17,
-                            value: 0.9,
-                            iconOutline: Colors.white,
-                          ),
-                          Spacer(flex: 7,),
-                          Text("99%", style: TextStyle(fontSize: 18,),),
-                          Spacer(flex: 1,),
-                        ],
-                      ),
-                    ),
                   ),
                 ),
 
