@@ -1,5 +1,7 @@
 import 'package:alarm/alarm.dart';
+import 'package:first/account_setting/account_setting_screen.dart';
 import 'package:first/aiScreen.dart';
+import 'package:first/catheter/catheter_count_screen.dart';
 import 'package:first/chat/temp.dart';
 import 'package:first/home_ui.dart';
 import 'package:first/reference16.dart';
@@ -17,7 +19,7 @@ Future<void> main() async {
 
   runApp(
     const MaterialApp(
-      home: HomeUI(),
+      home: AccountSettingScreen(),
     )
   );
 }

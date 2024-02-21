@@ -1,4 +1,5 @@
 import 'package:cupertino_battery_indicator/cupertino_battery_indicator.dart';
+import 'package:first/account_setting/account_setting_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
@@ -326,6 +327,24 @@ class _HomeUIState extends State<HomeUI> {
                       ),
                     ),
                     centerTitle: false,
+                  ),
+                ),
+
+                SliverToBoxAdapter(  // 단일 위젯은 요걸로
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10, top: 20,),
+                    child: SizedBox(
+                      height: 70,
+                      child: FilledButton(
+                        style: FilledButton.styleFrom(
+                          backgroundColor: Colors.blueGrey,
+                        ),
+                        onPressed: (){
+                          Navigator.of(context).pushReplacement(CupertinoPageRoute(builder: (context) => AccountSettingScreen()));
+                        },
+                        child: const Text("Go to accountSettings", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+                      ),
+                    ),
                   ),
                 ),
 
