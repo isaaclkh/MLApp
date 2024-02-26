@@ -20,8 +20,8 @@ class AccountSettingScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(height: 10,),
-          Icon(Icons.account_circle_rounded, size: 100,),
-          Text("Isaac", style: TextStyle(color: Colors.white, fontSize: 30,),),
+          const Icon(Icons.account_circle_rounded, size: 100,),
+          const Text("Isaac", style: TextStyle(color: Colors.white, fontSize: 30,),),
           const SizedBox(height: 30,),
           Container(
             decoration: const BoxDecoration(

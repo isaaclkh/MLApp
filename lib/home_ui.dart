@@ -1,6 +1,9 @@
+import 'dart:ffi';
+
 import 'package:cupertino_battery_indicator/cupertino_battery_indicator.dart';
 import 'package:first/account_setting/account_setting_screen.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,11 +27,16 @@ class _HomeUIState extends State<HomeUI> {
   SMIInput<double>? _numberExampleInput;
   ValueNotifier<double> batteryValue = ValueNotifier(0);
 
+  List<String> result = ['2024/02/26/16/00/00/669', '2023/10/29/17/31/17/669'];
+
   List<String> cmtTitle = ["\nFREE", "\nPREPARE", "\n!!WARNING!!"];
   List<Color> cmtColors = [Colors.green, Colors.orange, Colors.red];
   List<Color> cardColors = [const Color.fromRGBO(200,225,204, 1), const Color.fromRGBO(255,215,105, 1), const Color.fromRGBO(253,216,216,1)];
   List<Color> infoColors = [const Color.fromRGBO(143,182,171, 1), const Color.fromRGBO(231,159,49, 1), const Color.fromRGBO(238,114,114,1)];
   List<Color> batteryColors = [const Color.fromRGBO(200,225,204, 1), const Color.fromRGBO(255,215,105, 1), const Color.fromRGBO(253,216,216,1)];
+
+  DateTime current = DateTime.now();
+  late Stream timer;
 
   @override
   initState(){
@@ -37,13 +45,26 @@ class _HomeUIState extends State<HomeUI> {
     maxLevel = 8;
     levelIdx = 0;
     batteryValue.value = 100;
+
+    timer = Stream.periodic(const Duration(minutes: 1), (x){
+      setState(() {
+        current = current.add(const Duration(minutes: 1),);
+      });
+      return current;
+    });
+
+    timer.listen((event) {
+      if(kDebugMode){
+        print("current time: $event");
+      }
+    });
  }
 
  @override
   void dispose() {
     // TODO: implement dispose
    _stmController.dispose();
-    super.dispose();
+   super.dispose();
   }
 
  void _riveOneInit(Artboard art){
@@ -108,7 +129,59 @@ class _HomeUIState extends State<HomeUI> {
     }
   }
 
+  String parseTimeStamp(String str){
+    var spStr = str.split("/");
+    var finalStr = spStr[0];// year
+    finalStr += "/";
+    finalStr += spStr[1]; // month
+    finalStr += "/";
+    finalStr += spStr[2]; // day
+    finalStr += "/";
+    finalStr += spStr[3]; // hour
+    finalStr += ":";
+    finalStr += spStr[4]; // min
+    finalStr += ":";
+    finalStr += spStr[5]; // sec
+    return finalStr;
+  }
+
   final todayString = DateFormat.yMMMd().format(DateTime.now());
+
+  String diffTime(String timeD){
+    String resultStr;
+    List<String> splitTimeD = timeD.split("/");
+    String timeDToDateTime = "${splitTimeD[0]}-${splitTimeD[1]}-${splitTimeD[2]} ${splitTimeD[3]}:${splitTimeD[4]}:${splitTimeD[5]}";
+
+    var timeDConvert = DateTime.parse(timeDToDateTime);
+    Duration diff = current.difference(timeDConvert);
+    resultStr = diff.toString().split('.').first.padLeft(8, "0");
+    List<String> formatting = resultStr.split(":");
+    resultStr = "";
+
+    if(int.parse(formatting[0])>0) {
+      resultStr += formatting[0];
+      resultStr += "hour";
+    }
+    if(int.parse(formatting[1])>0) {
+      if(resultStr != "") resultStr += " ";
+      resultStr += formatting[1];
+      resultStr += "min";
+    }
+    if(int.parse(formatting[2])>0) {
+      if(resultStr != "") resultStr += " ";
+      resultStr += formatting[2];
+      resultStr += "sec";
+    }
+
+    if(int.parse(formatting[0])==0 && int.parse(formatting[1])==0 && int.parse(formatting[2])==0) {
+      resultStr += "NOW";
+    } else {
+      resultStr += " before";
+    }
+
+    return resultStr;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +217,7 @@ class _HomeUIState extends State<HomeUI> {
           Expanded(
             child: CustomScrollView(
               slivers: [
-                SliverToBoxAdapter(  // 단일 위젯은 요걸로
+                SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 10, left: 15, right: 15,),
                     child: Container(
@@ -197,7 +270,7 @@ class _HomeUIState extends State<HomeUI> {
                                       },
                                     ),
                                   ),
-                                  Spacer(flex: 1,),
+                                  const Spacer(flex: 1,),
                                 ],
                               ),
                             ),
@@ -220,7 +293,7 @@ class _HomeUIState extends State<HomeUI> {
                     ),
                   ),
                 ),
-                SliverToBoxAdapter(  // 단일 위젯은 요걸로
+                SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 15, right: 15,),
                     child: Container(
@@ -300,6 +373,7 @@ class _HomeUIState extends State<HomeUI> {
                   expandedHeight: MediaQuery.of(context).size.height * 0.13,
                   collapsedHeight: MediaQuery.of(context).size.height * 0.1,
                   backgroundColor: Colors.white,
+                  automaticallyImplyLeading: false,
                   flexibleSpace: FlexibleSpaceBar(
                     titlePadding: const EdgeInsets.only(left: 30.0, top: 5.0, right: 0.0, bottom: 15.0),
                     title: RichText(
@@ -330,7 +404,7 @@ class _HomeUIState extends State<HomeUI> {
                   ),
                 ),
 
-                SliverToBoxAdapter(  // 단일 위젯은 요걸로
+                SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10, top: 20,),
                     child: SizedBox(
@@ -348,17 +422,83 @@ class _HomeUIState extends State<HomeUI> {
                   ),
                 ),
 
-                SliverToBoxAdapter(  // 단일 위젯은 요걸로
-                  child: Container(
-                    height: 500.0,
-                    color: Colors.white,
-                    child: const Center(
-                      child: Text("Some Start Widgets"),
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 30, top: 20, bottom: 10,),
+                    child: Text("Measured Time", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
+                  ),
+                ),
+
+
+                result.isEmpty?
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20,),
+                    child: Container(
+                      height: 100.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                        border: Border.all(
+                          width: 1,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      child: const Center(
+                        child: Text("You haven't measure yet", style: TextStyle(fontSize: 18, color: Colors.black54),),
+                      ),
+                    ),
+                  ),
+                )
+                : SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                    child: Container(
+                      height: 50.0 * result.length,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          width: 1,
+                          color: Colors.black54,
+                        )
+                      ),
+                      child: Center(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: result.length,
+                          itemBuilder: (BuildContext context, int index){
+                            String parseString = parseTimeStamp(result[index]);
+                            String diffStr = diffTime(result[index]);
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 20.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: MediaQuery.of(context).size.width * 0.77,
+                                    height: 23,
+                                    color: Colors.black12, child: Text(parseString, style: const TextStyle(color: Colors.black),),
+                                  ),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width * 0.77,
+                                    height: 23,
+                                    color: Colors.black12, child: Text(diffStr, style: const TextStyle(color: Colors.blue),),
+                                  ),
+                                ],
+                              ),
+                            );
+
+                          },
+                        ),
+                      ),
                     ),
                   ),
                 ),
 
-                SliverToBoxAdapter(  // 단일 위젯은 요걸로
+                SliverToBoxAdapter(
                   child: Container(
                     height: 500.0,
                     color: Colors.blueGrey,
