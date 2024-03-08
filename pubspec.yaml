@@ -49,6 +49,7 @@ dependencies:
   flutter_holo_date_picker: ^1.1.3
   wolt_modal_sheet: ^0.4.1
 
+  intl: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,13 +1,9 @@
-import 'dart:ffi';
 
-import 'package:cupertino_battery_indicator/cupertino_battery_indicator.dart';
 import 'package:first/account_setting/account_setting_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:rive/rive.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
@@ -266,7 +262,7 @@ class _HomeUIState extends State<HomeUI> {
                                       mergeMode: true,
                                       animationDuration: 0,
                                       onGetText: (double value){
-                                        return Text("${value.toInt()}", style: TextStyle(color: Colors.white, fontSize: 20,),);
+                                        return Text("${value.toInt()}", style: const TextStyle(color: Colors.white, fontSize: 20,),);
                                       },
                                     ),
                                   ),
@@ -414,7 +410,7 @@ class _HomeUIState extends State<HomeUI> {
                           backgroundColor: Colors.blueGrey,
                         ),
                         onPressed: (){
-                          Navigator.of(context).pushReplacement(CupertinoPageRoute(builder: (context) => AccountSettingScreen()));
+                          Navigator.of(context).pushReplacement(CupertinoPageRoute(builder: (context) => const AccountSettingScreen()));
                         },
                         child: const Text("Go to accountSettings", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
                       ),
