@@ -1,6 +1,5 @@
 import 'package:first/account_setting/account_settings_tile.dart';
 import 'package:first/account_setting/settings_tile.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../home_ui.dart';

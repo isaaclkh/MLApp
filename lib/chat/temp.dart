@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
@@ -13,8 +12,8 @@ class Temp extends StatefulWidget {
 
 class _TempState extends State<Temp> {
   final textCnt = TextEditingController();
-  GlobalKey<AnimatedListState> _aniListKey = GlobalKey<AnimatedListState>();
-  List<String> _chats = [];
+  final GlobalKey<AnimatedListState> _aniListKey = GlobalKey<AnimatedListState>();
+  final List<String> _chats = [];
 
   Widget _buildItem(context, index, animation){
     return ChatMessage(txt: _chats[index], animation: animation,);
