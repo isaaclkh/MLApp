@@ -3,8 +3,10 @@ import 'package:first/catheter/catheter_count_screen.dart';
 import 'package:first/catheter/catheter_shared_prefs.dart';
 import 'package:first/record/carousel_example.dart';
 import 'package:first/record/record_screen.dart';
+import 'package:first/record/urine_collection_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 
 Future<void> main() async {
@@ -15,8 +17,11 @@ Future<void> main() async {
   await CatheterSharedPrefs().init();
 
   runApp(
-    const MaterialApp(
-      home: RecordScreen(),
-    )
+    ChangeNotifierProvider(
+      create: (_) => UrineCollectionProvider(),
+      child: const MaterialApp(
+        home: RecordScreen(),
+      ),
+    ),
   );
 }
