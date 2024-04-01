@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import 'graph/graph_widget.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +23,7 @@ Future<void> main() async {
     ChangeNotifierProvider(
       create: (_) => UrineCollectionProvider(),
       child: const MaterialApp(
-        home: SettingScreen(),
+        home: GraphWidget(),
       ),
     ),
   );
